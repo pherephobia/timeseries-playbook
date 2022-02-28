@@ -47,7 +47,7 @@ library(ggplot2)
 ```{r}
 vic_elec %>% 
   janitor::clean_names() %>% 
-  filter(year(time) == 2012) %>% 
+  dplyr::filter(year(time) == 2012) %>% 
   gg_season(demand, period = "day") +
   theme(legend.position = "none") +
   labs(y="MWh", title="Electricity demand: Victoria")
@@ -123,7 +123,7 @@ for (i in seq(N)){
 df.wn$ind <- df.wn$ind %>% as.factor()
 
 # One sample
-ggplot(df.wn %>% filter(ind == "1"), aes(x = t, y = y, col = ind)) + geom_line()
+ggplot(df.wn %>% dplyr::filter(ind == "1"), aes(x = t, y = y, col = ind)) + geom_line()
 
 # Distribution
 ggplot(df.wn, aes(x = t, y = y, col = ind)) + 
@@ -154,7 +154,7 @@ for (i in seq(N)){
 df.rw$ind <- df.rw$ind %>% as.factor()
 
 # One sample
-ggplot(df.rw %>% filter(ind == "1"), aes(x = t, y = y, col = ind)) + geom_line()
+ggplot(df.rw %>% dplyr::filter(ind == "1"), aes(x = t, y = y, col = ind)) + geom_line()
 
 # Distribution
 ggplot(df.rw, aes(x = t, y = y, col = ind)) + 

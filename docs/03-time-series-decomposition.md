@@ -69,7 +69,7 @@ rank_gdp<- gdp_national %>%
 rank_gdp %>% 
   ggplot(aes(x = year, y =rank_total_gdp , fill = nation ))+
   geom_line()+
-  geom_line(data = rank_gdp %>% filter(nation =="한국"),color = "green",size =2)+
+  geom_line(data = rank_gdp %>% dplyr::filter(nation =="한국"),color = "green",size =2)+
   labs(title = "OECD 국가 내 GDP 순위")
 ```
 
@@ -79,7 +79,7 @@ rank_gdp %>%
 rank_gdp %>% 
   ggplot(aes(x = year, y =rank_per_gdp , fill = nation ))+
   geom_line()+
-  geom_line(data = rank_gdp %>% filter(nation =="한국"),color = "green",size =2)+
+  geom_line(data = rank_gdp %>% dplyr::filter(nation =="한국"),color = "green",size =2)+
   labs(title = "OECD 국가 내 1인당 GDP 순위")
 ```
 
@@ -87,8 +87,8 @@ rank_gdp %>%
 
 ```r
 rank_gdp %>% 
-  filter(year<=2019) %>% 
-  filter(nation == "한국") %>% 
+  dplyr::filter(year<=2019) %>% 
+  dplyr::filter(nation == "한국") %>% 
   pivot_longer(cols = contains("rank")) %>% 
   ggplot(aes(x = year, y =value , color = name ))+
   geom_line()+
@@ -122,7 +122,7 @@ gdp_national %>%
     trade_net_income = (export - import) ,
     adjusted_trade_net_income = trade_net_income / CPI*100
   ) %>%
-  filter(nation=="한국") %>%
+  dplyr::filter(nation=="한국") %>%
   pivot_longer(cols = contains("net")) %>% 
   ggplot(aes(x= year, y= value ,color = name))+
   geom_line()
@@ -228,7 +228,7 @@ y_{t}=S_{t}\times T_{t}\times R_{t}
 
 ```r
 us_retail_employment <- us_employment %>%
-  filter(year(Month) >= 1990, Title == "Retail Trade")
+  dplyr::filter(year(Month) >= 1990, Title == "Retail Trade")
 
 classical_decomp<- us_retail_employment %>%
   model(
@@ -290,7 +290,7 @@ us_retail_employment %>%
 
 ```r
 global_economy %>%
-  filter(Country == "Australia") %>%
+  dplyr::filter(Country == "Australia") %>%
   autoplot(Exports) +
   labs(y = "% of GDP", title = "Total Australian exports")
 ```
@@ -300,7 +300,7 @@ global_economy %>%
 ```r
 library(zoo)
 aus_exports <- global_economy %>%
-  filter(Country == "Australia") %>%
+  dplyr::filter(Country == "Australia") %>%
   mutate(
     `3-MA` =rollmean(Exports,fill = NA,k = 3),
     `5-MA` =rollmean(Exports,fill = NA,k = 5),
@@ -321,31 +321,88 @@ aus_exports %>%
 
 <img src="03-time-series-decomposition_files/figure-html/unnamed-chunk-6-2.png" width="672" />
 
-
 <table class="kable_wrapper">
 <caption>(\#tab:unnamed-chunk-7)처음과 마지막 행 5개</caption>
 <tbody>
   <tr>
    <td> 
 
-| Year|  Exports|     5-MA|
-|----:|--------:|--------:|
-| 1960| 12.99445|       NA|
-| 1961| 12.40310|       NA|
-| 1962| 13.94301| 13.45694|
-| 1963| 13.00589| 13.50208|
-| 1964| 14.93825| 13.60794|
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:right;"> Year </th>
+   <th style="text-align:right;"> Exports </th>
+   <th style="text-align:right;"> 5-MA </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> 1960 </td>
+   <td style="text-align:right;"> 12.99445 </td>
+   <td style="text-align:right;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 1961 </td>
+   <td style="text-align:right;"> 12.40310 </td>
+   <td style="text-align:right;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 1962 </td>
+   <td style="text-align:right;"> 13.94301 </td>
+   <td style="text-align:right;"> 13.45694 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 1963 </td>
+   <td style="text-align:right;"> 13.00589 </td>
+   <td style="text-align:right;"> 13.50208 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 1964 </td>
+   <td style="text-align:right;"> 14.93825 </td>
+   <td style="text-align:right;"> 13.60794 </td>
+  </tr>
+</tbody>
+</table>
 
  </td>
    <td> 
 
-| Year|  Exports|     5-MA|
-|----:|--------:|--------:|
-| 2013| 19.98772| 20.81365|
-| 2014| 21.07577| 20.36969|
-| 2015| 20.01296| 20.31997|
-| 2016| 19.25303|       NA|
-| 2017| 21.27035|       NA|
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:right;"> Year </th>
+   <th style="text-align:right;"> Exports </th>
+   <th style="text-align:right;"> 5-MA </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> 2013 </td>
+   <td style="text-align:right;"> 19.98772 </td>
+   <td style="text-align:right;"> 20.81365 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 2014 </td>
+   <td style="text-align:right;"> 21.07577 </td>
+   <td style="text-align:right;"> 20.36969 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 2015 </td>
+   <td style="text-align:right;"> 20.01296 </td>
+   <td style="text-align:right;"> 20.31997 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 2016 </td>
+   <td style="text-align:right;"> 19.25303 </td>
+   <td style="text-align:right;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 2017 </td>
+   <td style="text-align:right;"> 21.27035 </td>
+   <td style="text-align:right;"> NA </td>
+  </tr>
+</tbody>
+</table>
 
  </td>
   </tr>
@@ -360,7 +417,7 @@ aus_exports %>%
 
 ```r
 beer <- aus_production %>%
-  filter(year(Quarter) >= 1992) %>%
+  dplyr::filter(year(Quarter) >= 1992) %>%
   select(Quarter, Beer)
 beer_ma <- beer %>%
   mutate(
@@ -373,31 +430,100 @@ beer_ma <- beer %>%
   # mutate(`2x4-MA` =rollmean(`4-MA`,fill = NA,k = 2,align = "right")) 
 ```
 
-
 <table class="kable_wrapper">
 <caption>(\#tab:unnamed-chunk-9)처음과 마지막 행 5개</caption>
 <tbody>
   <tr>
    <td> 
 
-|Quarter | Beer|   4-MA|  2x4-MA|
-|:-------|----:|------:|-------:|
-|1992 Q1 |  443|     NA|      NA|
-|1992 Q2 |  410| 451.25|      NA|
-|1992 Q3 |  420| 448.75| 450.000|
-|1992 Q4 |  532| 451.50| 450.125|
-|1993 Q1 |  433| 449.00| 450.250|
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Quarter </th>
+   <th style="text-align:right;"> Beer </th>
+   <th style="text-align:right;"> 4-MA </th>
+   <th style="text-align:right;"> 2x4-MA </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 1992 Q1 </td>
+   <td style="text-align:right;"> 443 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1992 Q2 </td>
+   <td style="text-align:right;"> 410 </td>
+   <td style="text-align:right;"> 451.25 </td>
+   <td style="text-align:right;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1992 Q3 </td>
+   <td style="text-align:right;"> 420 </td>
+   <td style="text-align:right;"> 448.75 </td>
+   <td style="text-align:right;"> 450.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1992 Q4 </td>
+   <td style="text-align:right;"> 532 </td>
+   <td style="text-align:right;"> 451.50 </td>
+   <td style="text-align:right;"> 450.125 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1993 Q1 </td>
+   <td style="text-align:right;"> 433 </td>
+   <td style="text-align:right;"> 449.00 </td>
+   <td style="text-align:right;"> 450.250 </td>
+  </tr>
+</tbody>
+</table>
 
  </td>
    <td> 
 
-|Quarter | Beer|   4-MA|  2x4-MA|
-|:-------|----:|------:|-------:|
-|2009 Q2 |  398| 430.00| 430.000|
-|2009 Q3 |  419| 429.75| 429.875|
-|2009 Q4 |  488| 423.75| 426.750|
-|2010 Q1 |  414|     NA|      NA|
-|2010 Q2 |  374|     NA|      NA|
+<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Quarter </th>
+   <th style="text-align:right;"> Beer </th>
+   <th style="text-align:right;"> 4-MA </th>
+   <th style="text-align:right;"> 2x4-MA </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> 2009 Q2 </td>
+   <td style="text-align:right;"> 398 </td>
+   <td style="text-align:right;"> 430.00 </td>
+   <td style="text-align:right;"> 430.000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2009 Q3 </td>
+   <td style="text-align:right;"> 419 </td>
+   <td style="text-align:right;"> 429.75 </td>
+   <td style="text-align:right;"> 429.875 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2009 Q4 </td>
+   <td style="text-align:right;"> 488 </td>
+   <td style="text-align:right;"> 423.75 </td>
+   <td style="text-align:right;"> 426.750 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2010 Q1 </td>
+   <td style="text-align:right;"> 414 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 2010 Q2 </td>
+   <td style="text-align:right;"> 374 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> NA </td>
+  </tr>
+</tbody>
+</table>
 
  </td>
   </tr>
@@ -472,23 +598,104 @@ seasonal_step_4
 #> [1] -0.01894243
 ```
 
-
-Table: (\#tab:unnamed-chunk-11)가법모형 seasonal 계산결과
-
-|    seasonal| seasonal_step_2| seasonal_step_3| seasonal_step_5|Month   |
-|-----------:|---------------:|---------------:|---------------:|:-------|
-|  -75.461230|              NA|       -75.48017|      -75.461230|1990 1  |
-| -273.051173|              NA|      -273.07011|     -273.051173|1990 2  |
-| -253.195856|              NA|      -253.21480|     -253.195856|1990 3  |
-| -190.219599|              NA|      -190.23854|     -190.219599|1990 4  |
-|  -88.923022|              NA|       -88.94196|      -88.923022|1990 5  |
-|  -10.388349|              NA|       -10.40729|      -10.388349|1990 6  |
-|  -13.311661|       -7.662500|       -13.33060|      -13.311661|1990 7  |
-|   -9.992695|       -1.195833|       -10.01164|       -9.992695|1990 8  |
-|  -87.379333|      -27.470833|       -87.39828|      -87.379333|1990 9  |
-|   34.634747|       68.454167|        34.61580|       34.634747|1990 10 |
-|  394.300408|      372.362500|       394.28147|      394.300408|1990 11 |
-|  572.987764|      610.708333|       572.96882|      572.987764|1990 12 |
+<table>
+<caption>(\#tab:unnamed-chunk-11)가법모형 seasonal 계산결과</caption>
+ <thead>
+  <tr>
+   <th style="text-align:right;"> seasonal </th>
+   <th style="text-align:right;"> seasonal_step_2 </th>
+   <th style="text-align:right;"> seasonal_step_3 </th>
+   <th style="text-align:right;"> seasonal_step_5 </th>
+   <th style="text-align:left;"> Month </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> -75.461230 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> -75.48017 </td>
+   <td style="text-align:right;"> -75.461230 </td>
+   <td style="text-align:left;"> 1990 1 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -273.051173 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> -273.07011 </td>
+   <td style="text-align:right;"> -273.051173 </td>
+   <td style="text-align:left;"> 1990 2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -253.195856 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> -253.21480 </td>
+   <td style="text-align:right;"> -253.195856 </td>
+   <td style="text-align:left;"> 1990 3 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -190.219599 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> -190.23854 </td>
+   <td style="text-align:right;"> -190.219599 </td>
+   <td style="text-align:left;"> 1990 4 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -88.923022 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> -88.94196 </td>
+   <td style="text-align:right;"> -88.923022 </td>
+   <td style="text-align:left;"> 1990 5 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -10.388349 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> -10.40729 </td>
+   <td style="text-align:right;"> -10.388349 </td>
+   <td style="text-align:left;"> 1990 6 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -13.311661 </td>
+   <td style="text-align:right;"> -7.662500 </td>
+   <td style="text-align:right;"> -13.33060 </td>
+   <td style="text-align:right;"> -13.311661 </td>
+   <td style="text-align:left;"> 1990 7 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -9.992695 </td>
+   <td style="text-align:right;"> -1.195833 </td>
+   <td style="text-align:right;"> -10.01164 </td>
+   <td style="text-align:right;"> -9.992695 </td>
+   <td style="text-align:left;"> 1990 8 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> -87.379333 </td>
+   <td style="text-align:right;"> -27.470833 </td>
+   <td style="text-align:right;"> -87.39828 </td>
+   <td style="text-align:right;"> -87.379333 </td>
+   <td style="text-align:left;"> 1990 9 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 34.634747 </td>
+   <td style="text-align:right;"> 68.454167 </td>
+   <td style="text-align:right;"> 34.61580 </td>
+   <td style="text-align:right;"> 34.634747 </td>
+   <td style="text-align:left;"> 1990 10 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 394.300408 </td>
+   <td style="text-align:right;"> 372.362500 </td>
+   <td style="text-align:right;"> 394.28147 </td>
+   <td style="text-align:right;"> 394.300408 </td>
+   <td style="text-align:left;"> 1990 11 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 572.987764 </td>
+   <td style="text-align:right;"> 610.708333 </td>
+   <td style="text-align:right;"> 572.96882 </td>
+   <td style="text-align:right;"> 572.987764 </td>
+   <td style="text-align:left;"> 1990 12 </td>
+  </tr>
+</tbody>
+</table>
 
 
 ```r
@@ -558,23 +765,117 @@ seasonal_mult <- seasonal_mult %>%
   mutate(seasonal_step_4 = seasonal_step_3/seasonal_step_3_scale*12)
 ```
 
-
-Table: (\#tab:unnamed-chunk-14)승법모형 seasonal 계산결과
-
-| month(Month)|  seasonal| seasonal_step_2| seasonal_step_3|Month   | seasonal_step_4|
-|------------:|---------:|---------------:|---------------:|:-------|---------------:|
-|            1| 0.9949463|              NA|       0.9949310|1990 1  |       0.9949463|
-|            2| 0.9814765|              NA|       0.9814614|1990 2  |       0.9814765|
-|            3| 0.9827143|              NA|       0.9826991|1990 3  |       0.9827143|
-|            4| 0.9869857|              NA|       0.9869705|1990 4  |       0.9869857|
-|            5| 0.9938970|              NA|       0.9938817|1990 5  |       0.9938970|
-|            6| 0.9992581|              NA|       0.9992427|1990 6  |       0.9992581|
-|            7| 0.9990583|       0.9994185|       0.9990429|1990 7  |       0.9990583|
-|            8| 0.9993224|       0.9999091|       0.9993070|1990 8  |       0.9993224|
-|            9| 0.9941725|       0.9979095|       0.9941572|1990 9  |       0.9941725|
-|           10| 1.0024237|       1.0052188|       1.0024083|1990 10 |       1.0024237|
-|           11| 1.0267098|       1.0284473|       1.0266940|1990 11 |       1.0267098|
-|           12| 1.0390354|       1.0467532|       1.0390193|1990 12 |       1.0390354|
+<table>
+<caption>(\#tab:unnamed-chunk-14)승법모형 seasonal 계산결과</caption>
+ <thead>
+  <tr>
+   <th style="text-align:right;"> month(Month) </th>
+   <th style="text-align:right;"> seasonal </th>
+   <th style="text-align:right;"> seasonal_step_2 </th>
+   <th style="text-align:right;"> seasonal_step_3 </th>
+   <th style="text-align:left;"> Month </th>
+   <th style="text-align:right;"> seasonal_step_4 </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:right;"> 0.9949463 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> 0.9949310 </td>
+   <td style="text-align:left;"> 1990 1 </td>
+   <td style="text-align:right;"> 0.9949463 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 2 </td>
+   <td style="text-align:right;"> 0.9814765 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> 0.9814614 </td>
+   <td style="text-align:left;"> 1990 2 </td>
+   <td style="text-align:right;"> 0.9814765 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 3 </td>
+   <td style="text-align:right;"> 0.9827143 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> 0.9826991 </td>
+   <td style="text-align:left;"> 1990 3 </td>
+   <td style="text-align:right;"> 0.9827143 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 4 </td>
+   <td style="text-align:right;"> 0.9869857 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> 0.9869705 </td>
+   <td style="text-align:left;"> 1990 4 </td>
+   <td style="text-align:right;"> 0.9869857 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 5 </td>
+   <td style="text-align:right;"> 0.9938970 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> 0.9938817 </td>
+   <td style="text-align:left;"> 1990 5 </td>
+   <td style="text-align:right;"> 0.9938970 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 6 </td>
+   <td style="text-align:right;"> 0.9992581 </td>
+   <td style="text-align:right;"> NA </td>
+   <td style="text-align:right;"> 0.9992427 </td>
+   <td style="text-align:left;"> 1990 6 </td>
+   <td style="text-align:right;"> 0.9992581 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 7 </td>
+   <td style="text-align:right;"> 0.9990583 </td>
+   <td style="text-align:right;"> 0.9994185 </td>
+   <td style="text-align:right;"> 0.9990429 </td>
+   <td style="text-align:left;"> 1990 7 </td>
+   <td style="text-align:right;"> 0.9990583 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 8 </td>
+   <td style="text-align:right;"> 0.9993224 </td>
+   <td style="text-align:right;"> 0.9999091 </td>
+   <td style="text-align:right;"> 0.9993070 </td>
+   <td style="text-align:left;"> 1990 8 </td>
+   <td style="text-align:right;"> 0.9993224 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 9 </td>
+   <td style="text-align:right;"> 0.9941725 </td>
+   <td style="text-align:right;"> 0.9979095 </td>
+   <td style="text-align:right;"> 0.9941572 </td>
+   <td style="text-align:left;"> 1990 9 </td>
+   <td style="text-align:right;"> 0.9941725 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 10 </td>
+   <td style="text-align:right;"> 1.0024237 </td>
+   <td style="text-align:right;"> 1.0052188 </td>
+   <td style="text-align:right;"> 1.0024083 </td>
+   <td style="text-align:left;"> 1990 10 </td>
+   <td style="text-align:right;"> 1.0024237 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 11 </td>
+   <td style="text-align:right;"> 1.0267098 </td>
+   <td style="text-align:right;"> 1.0284473 </td>
+   <td style="text-align:right;"> 1.0266940 </td>
+   <td style="text-align:left;"> 1990 11 </td>
+   <td style="text-align:right;"> 1.0267098 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 12 </td>
+   <td style="text-align:right;"> 1.0390354 </td>
+   <td style="text-align:right;"> 1.0467532 </td>
+   <td style="text-align:right;"> 1.0390193 </td>
+   <td style="text-align:left;"> 1990 12 </td>
+   <td style="text-align:right;"> 1.0390354 </td>
+  </tr>
+</tbody>
+</table>
 
 
 ```r

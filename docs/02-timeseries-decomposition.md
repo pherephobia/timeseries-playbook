@@ -49,7 +49,7 @@ library(ggplot2)
 ```r
 vic_elec %>% 
   janitor::clean_names() %>% 
-  filter(year(time) == 2012) %>% 
+  dplyr::filter(year(time) == 2012) %>% 
   gg_season(demand, period = "day") +
   theme(legend.position = "none") +
   labs(y="MWh", title="Electricity demand: Victoria")
@@ -131,7 +131,7 @@ for (i in seq(N)){
 df.wn$ind <- df.wn$ind %>% as.factor()
 
 # One sample
-ggplot(df.wn %>% filter(ind == "1"), aes(x = t, y = y, col = ind)) + geom_line()
+ggplot(df.wn %>% dplyr::filter(ind == "1"), aes(x = t, y = y, col = ind)) + geom_line()
 ```
 
 <img src="02-timeseries-decomposition_files/figure-html/unnamed-chunk-4-1.png" width="672" />
@@ -169,7 +169,7 @@ for (i in seq(N)){
 df.rw$ind <- df.rw$ind %>% as.factor()
 
 # One sample
-ggplot(df.rw %>% filter(ind == "1"), aes(x = t, y = y, col = ind)) + geom_line()
+ggplot(df.rw %>% dplyr::filter(ind == "1"), aes(x = t, y = y, col = ind)) + geom_line()
 ```
 
 <img src="02-timeseries-decomposition_files/figure-html/unnamed-chunk-5-1.png" width="672" />
@@ -205,16 +205,16 @@ white.noise.r
 #> # A tsibble: 100 x 3 [1]
 #>        t      y    yavg
 #>    <int>  <dbl>   <dbl>
-#>  1     1  0.534 NA     
-#>  2     2 -0.362 NA     
-#>  3     3 -2.00  NA     
-#>  4     4  1.20  NA     
-#>  5     5  0.988  0.0712
-#>  6     6 -0.425 -0.121 
-#>  7     7 -0.917 -0.232 
-#>  8     8  1.11   0.391 
-#>  9     9  0.835  0.318 
-#> 10    10 -0.943 -0.0678
+#>  1     1 -2.67  NA     
+#>  2     2  1.15  NA     
+#>  3     3 -0.923 NA     
+#>  4     4 -0.128 NA     
+#>  5     5  1.62  -0.191 
+#>  6     6 -1.79  -0.0153
+#>  7     7 -1.91  -0.626 
+#>  8     8 -0.343 -0.510 
+#>  9     9 -0.169 -0.518 
+#> 10    10 -0.287 -0.899 
 #> # ... with 90 more rows
 ```
 

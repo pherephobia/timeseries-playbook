@@ -97,7 +97,7 @@ tibble::tribble(
 
 ```{r}
 prison %>% 
-  filter(state == "ACT", gender == "Female",
+  dplyr::filter(state == "ACT", gender == "Female",
          legal =="Remanded", indigenous == "ATSI") %>% 
   autoplot(count) +
   labs(title = "시간에 따른 죄수 인구의 변화",
@@ -124,7 +124,7 @@ head(vic_elec)
 ```{r fig.cap="하루 기준 전력 수요량의 변화 패턴"}
 vic_elec %>% 
   janitor::clean_names() %>% 
-  filter(year(time) == 2012) %>% 
+  dplyr::filter(year(time) == 2012) %>% 
   gg_season(demand, period = "day") +
   theme(legend.position = "none") +
   labs(y="MWh", title="Electricity demand: Victoria")
@@ -135,7 +135,7 @@ vic_elec %>%
 ```{r fig.cap="한주 기준 전력 수요량의 변화 패턴"}
 vic_elec %>% 
   janitor::clean_names() %>% 
-  filter(year(time) == 2012) %>% 
+  dplyr::filter(year(time) == 2012) %>% 
   gg_season(demand, period = "week") +
   theme(legend.position = "none") +
   labs(y="MWh", title="Electricity demand: Victoria")
@@ -154,7 +154,7 @@ vic_elec %>%
 ```{r}
 vic_elec %>% 
   janitor::clean_names() %>% 
-  filter(year(time) == 2012) %>% 
+  dplyr::filter(year(time) == 2012) %>% 
    autoplot(demand) +
   labs(y = "GW",
        title = "Half-hourly electricity demand: Victoria")
@@ -164,7 +164,7 @@ vic_elec %>%
 ```{r}
 vic_elec %>% 
   janitor::clean_names() %>% 
-  filter(year(time) == 2012) %>% 
+  dplyr::filter(year(time) == 2012) %>% 
    autoplot(temperature) +
   labs(y = "Degrees Celsius",
        title = "Half-hourly electricity demand: Victoria")
@@ -175,7 +175,7 @@ vic_elec %>%
 ```{r}
 vic_elec %>% 
   janitor::clean_names() %>% 
-  filter(year(time) == 2012) %>% 
+  dplyr::filter(year(time) == 2012) %>% 
   ggplot(aes(x = temperature, y = demand)) +
   geom_point() +
   labs(x = "Temperature (degrees Celsius)",
@@ -237,7 +237,7 @@ lag plot은 다음과 같이 맥주 생산량 데이터의 계절성을 체크�
 ```{r}
 aus_production %>%
   janitor::clean_names() %>% 
-  filter(year(quarter) >= 2000) %>% 
+  dplyr::filter(year(quarter) >= 2000) %>% 
   gg_lag(beer, geom = "point") +
   labs(x = "lag(Beer, k)")
 ```

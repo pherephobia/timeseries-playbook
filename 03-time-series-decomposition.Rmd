@@ -22,7 +22,7 @@ col <- c("nation", "year", "total_GDP", "per_GDP" , "GDP_growth",
 gdp_national <-read.csv("csv_data/OECD.csv", fileEncoding = "euc-kr") 
 gdp_national<- gdp_national %>% 
   set_names(nm = col) %>% 
-  filter(! nation %in% c("세계","아시아","북아메리카","남아메리카","유럽","오세아니아","OECD"))
+  dplyr::filter(!nation %in% c("세계","아시아","북아메리카","남아메리카","유럽","오세아니아","OECD"))
 ```
 
 ```{r}
@@ -55,19 +55,19 @@ rank_gdp<- gdp_national %>%
 rank_gdp %>% 
   ggplot(aes(x = year, y =rank_total_gdp , fill = nation ))+
   geom_line()+
-  geom_line(data = rank_gdp %>% filter(nation =="한국"),color = "green",size =2)+
+  geom_line(data = rank_gdp %>% dplyr::filter(nation =="한국"),color = "green",size =2)+
   labs(title = "OECD 국가 내 GDP 순위")
   
 
 rank_gdp %>% 
   ggplot(aes(x = year, y =rank_per_gdp , fill = nation ))+
   geom_line()+
-  geom_line(data = rank_gdp %>% filter(nation =="한국"),color = "green",size =2)+
+  geom_line(data = rank_gdp %>% dplyr::filter(nation =="한국"),color = "green",size =2)+
   labs(title = "OECD 국가 내 1인당 GDP 순위")
 
 rank_gdp %>% 
-  filter(year<=2019) %>% 
-  filter(nation == "한국") %>% 
+  dplyr::filter(year<=2019) %>% 
+  dplyr::filter(nation == "한국") %>% 
   pivot_longer(cols = contains("rank")) %>% 
   ggplot(aes(x = year, y =value , color = name ))+
   geom_line()+
@@ -96,7 +96,7 @@ gdp_national %>%
     trade_net_income = (export - import) ,
     adjusted_trade_net_income = trade_net_income / CPI*100
   ) %>%
-  filter(nation=="한국") %>%
+  dplyr::filter(nation=="한국") %>%
   pivot_longer(cols = contains("net")) %>% 
   ggplot(aes(x= year, y= value ,color = name))+
   geom_line()
@@ -177,7 +177,7 @@ y_{t}=S_{t}\times T_{t}\times R_{t}
 
 ```{r}
 us_retail_employment <- us_employment %>%
-  filter(year(Month) >= 1990, Title == "Retail Trade")
+  dplyr::filter(year(Month) >= 1990, Title == "Retail Trade")
 
 classical_decomp<- us_retail_employment %>%
   model(
@@ -220,13 +220,13 @@ us_retail_employment %>%
 
 ```{r}
 global_economy %>%
-  filter(Country == "Australia") %>%
+  dplyr::filter(Country == "Australia") %>%
   autoplot(Exports) +
   labs(y = "% of GDP", title = "Total Australian exports")
 
 library(zoo)
 aus_exports <- global_economy %>%
-  filter(Country == "Australia") %>%
+  dplyr::filter(Country == "Australia") %>%
   mutate(
     `3-MA` =rollmean(Exports,fill = NA,k = 3),
     `5-MA` =rollmean(Exports,fill = NA,k = 5),
@@ -249,7 +249,7 @@ aus_exports %>%
 
 ```{r echo=FALSE}
 table_show_1<- global_economy %>%
-  filter(Country == "Australia") %>%
+  dplyr::filter(Country == "Australia") %>%
   mutate(`5-MA` =rollmean(Exports,fill = NA,k = 5)) %>% 
   select(Year,Exports, contains("MA"))
 knitr::kable(
@@ -269,7 +269,7 @@ knitr::kable(
 
 ```{r}
 beer <- aus_production %>%
-  filter(year(Quarter) >= 1992) %>%
+  dplyr::filter(year(Quarter) >= 1992) %>%
   select(Quarter, Beer)
 beer_ma <- beer %>%
   mutate(
